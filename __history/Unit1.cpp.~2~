@@ -1,0 +1,41 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit1.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TLabel1 *Label1;
+
+//---------------------------------------------------------------------------
+__fastcall TLabel1::TLabel1(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TLabel1::Button1Click(TObject *Sender)
+{
+	TStringList *users = new TStringList;
+	users->LoadFromFile("User.txt");
+
+	bool valid = false;
+	for (int i = 1; i < users->Count; i++) { // Skip header
+		TStringList *row = new TStringList;
+		row->CommaText = users->Strings[i];
+		if (row->Strings[1] == Edit1->Text && row->Strings[2] == Edit2->Text) {
+			valid = true;
+			break;
+		}
+	}
+
+    if (valid) {
+		Unit2->Show(); // Redirect to the management interface
+    } else {
+		Label3->Caption = "Le login ou le mot de passe n'existent pas";
+	}
+}
+//---------------------------------------------------------------------------
+
+

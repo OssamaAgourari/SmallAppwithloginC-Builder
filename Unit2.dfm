@@ -1,0 +1,89 @@
+object Form2: TForm2
+  Left = 0
+  Top = 0
+  Caption = 'Form2'
+  ClientHeight = 441
+  ClientWidth = 624
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -21
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  TextHeight = 30
+  object Label1: TLabel
+    Left = 168
+    Top = 32
+    Width = 286
+    Height = 45
+    Caption = 'Parking Managment'
+    Color = clHotLight
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clHotLight
+    Font.Height = -32
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+  end
+  object Button1: TButton
+    Left = 72
+    Top = 104
+    Width = 193
+    Height = 49
+    Caption = 'Add parking'
+    TabOrder = 0
+    StyleName = 'Glow'
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 72
+    Top = 201
+    Width = 193
+    Height = 49
+    Caption = 'Add etage'
+    TabOrder = 1
+    StyleName = 'Glow'
+    OnClick = Button2Click
+  end
+  object Button3: TButton
+    Left = 72
+    Top = 296
+    Width = 193
+    Height = 49
+    Caption = 'Add place'
+    TabOrder = 2
+    StyleName = 'Glow'
+    OnClick = Button3Click
+  end
+  object Button4: TButton
+    Left = 352
+    Top = 104
+    Width = 193
+    Height = 49
+    Caption = 'R'#233'server Place'
+    TabOrder = 3
+    StyleName = 'Glow'
+    OnClick = Button4Click
+  end
+  object Button5: TButton
+    Left = 352
+    Top = 201
+    Width = 193
+    Height = 49
+    Caption = 'Place Disponibles'
+    TabOrder = 4
+    StyleName = 'Glow'
+    OnClick = Button5Click
+  end
+  object Button6: TButton
+    Left = 352
+    Top = 296
+    Width = 193
+    Height = 49
+    Caption = ' Places Reserver'
+    TabOrder = 5
+    StyleName = 'Glow'
+    OnClick = Button6Click
+  end
+end

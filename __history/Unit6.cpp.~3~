@@ -1,0 +1,100 @@
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit6.h"
+#include "Unit2.h" // Include for the "Gestion de Parking" form
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm6 *Form6;
+
+// Constructor
+__fastcall TForm6::TForm6(TComponent* Owner)
+    : TForm(Owner)
+{
+}
+
+// FormShow event: Populate ComboBox1 with available places
+void __fastcall TForm6::FormShow(TObject *Sender)
+{
+    ComboBox1->Clear(); // Clear the ComboBox before populating
+    TStringList *places = new TStringList;
+    try {
+        // Load the file
+        places->LoadFromFile("Place.txt");
+
+        // Check if the file has content
+        if (places->Count == 0) {
+            ShowMessage("Le fichier Place.txt est vide.");
+            delete places;
+            return;
+        }
+
+        // Debugging output (optional)
+        // ShowMessage("File content: " + places->Text);
+
+        // Skip the header and process each row
+        for (int i = 1; i < places->Count; i++) { // Skip header row
+            TStringList *row = new TStringList;
+            try {
+                row->CommaText = places->Strings[i]; // Parse the row
+                if (row->Count >= 4 && row->Strings[3].Trim() == "D") { // Check availability
+                    ComboBox1->Items->Add("Place " + row->Strings[1].Trim() + " (Type: " + row->Strings[2].Trim() + ")");
+                }
+            } catch (...) {
+                ShowMessage("Erreur: Problème d'analyse dans la ligne " + IntToStr(i + 1));
+            }
+            delete row; // Free memory for each row
+        }
+    } catch (...) {
+        ShowMessage("Erreur: Impossible de lire le fichier Place.txt.");
+    }
+    delete places; // Clean up TStringList
+}
+
+// "Réserver" button click event
+void __fastcall TForm6::Button1Click(TObject *Sender)
+{
+    if (ComboBox1->ItemIndex == -1) { // No place selected
+        ShowMessage("Veuillez sélectionner une place.");
+        return;
+    }
+
+    TStringList *places = new TStringList;
+    try {
+        // Load the file
+        places->LoadFromFile("Place.txt");
+
+        // Find the selected place and mark it as reserved
+        for (int i = 1; i < places->Count; i++) { // Skip header
+            TStringList *row = new TStringList;
+            try {
+                row->CommaText = places->Strings[i]; // Parse the row
+                if (row->Count >= 4 && row->Strings[3].Trim() == "D") { // Check availability
+                    String placeText = "Place " + row->Strings[1].Trim() + " (Type: " + row->Strings[2].Trim() + ")";
+                    if (ComboBox1->Text == placeText) {
+                        row->Strings[3] = "N"; // Mark as reserved
+                        places->Strings[i] = row->CommaText; // Update the row
+                        break;
+                    }
+                }
+            } catch (...) {
+                ShowMessage("Erreur: Problème d'analyse dans la ligne " + IntToStr(i + 1));
+            }
+            delete row; // Free memory for each row
+        }
+
+        // Save the updated file
+        places->SaveToFile("Place.txt");
+
+        // Confirmation message
+        Memo1->Lines->Add("Place réservée avec succès!");
+
+        // Refresh the ComboBox
+        FormShow(Sender);
+    } catch (...) {
+        ShowMessage("Erreur: Impossible de réserver la place.");
+    }
+    delete places; // Clean up TStringList
+}
+

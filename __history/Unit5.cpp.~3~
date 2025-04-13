@@ -1,0 +1,41 @@
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit5.h"
+#include "Unit2.h" // Gestion de Parking form
+
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm5 *Form5;
+
+// Constructor
+__fastcall TForm5::TForm5(TComponent* Owner)
+    : TForm(Owner)
+{
+}
+
+// "Ajouter" button click event
+void __fastcall TForm5::Button1Click(TObject *Sender)
+{
+    // Add place logic here
+    TStringList *places = new TStringList;
+    try {
+        places->LoadFromFile("Place.txt");
+
+        // Calculate the next available ID
+        int nextId = 1;
+        if (places->Count > 1) { // Skip header
+            TStringList *lastRow = new TStringList;
+            lastRow->CommaText = places->Strings[places->Count - 1];
+            nextId = lastRow->Strings[0].ToIntDef(0) + 1;
+        }
+
+        // Add new place
+        places->Add(IntToStr(nextId) + "," + Edit1->Text + "," + Edit2->Text + ",D"); // Add new place (D: Disponible)
+        places->SaveToFile("Place.txt");
+        ShowMessage("Place ajoutée avec succès!");
+    } catch (...) {
+        ShowMessage("Erreur: Impossible de sauvegarder la place.");
+    }
+    delete places;
+}

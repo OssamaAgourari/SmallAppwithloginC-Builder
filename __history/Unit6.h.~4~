@@ -1,0 +1,27 @@
+#ifndef Unit6H
+#define Unit6H
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Forms.hpp>
+//---------------------------------------------------------------------------
+class TForm6 : public TForm
+{
+__published:
+    TListBox *ListBox1; // To display available places
+    TButton *Button1; // "Réserver" button
+    TButton *Button2; // "Afficher Places Disponibles" button
+    TLabel *Label1; // Title
+    TMemo *Memo1; // To display messages
+
+    void __fastcall Button1Click(TObject *Sender);
+    void __fastcall Button2Click(TObject *Sender); // Add this event handler
+
+public:
+    __fastcall TForm6(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TForm6 *Form6;
+//---------------------------------------------------------------------------
+#endif

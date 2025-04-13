@@ -1,0 +1,64 @@
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit6.h"
+#include "Unit2.h" // Gestion de Parking form
+
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm6 *Form6;
+
+// Constructor
+__fastcall TForm6::TForm6(TComponent* Owner)
+    : TForm(Owner)
+{
+}
+
+// FormShow event: Populate ComboBox1 with available places
+void __fastcall TForm6::FormShow(TObject *Sender)
+{
+    ComboBox1->Clear(); // Clear the ComboBox before populating
+    TStringList *places = new TStringList;
+    try {
+        places->LoadFromFile("Place.txt");
+        for (int i = 1; i < places->Count; i++) { // Skip header
+            TStringList *row = new TStringList;
+            row->CommaText = places->Strings[i];
+            if (row->Strings[3] == "D") { // Only add available places
+                ComboBox1->Items->Add("Place " + row->Strings[1] + " (Type: " + row->Strings[2] + ")");
+			}
+        }
+    } catch (...) {
+        ShowMessage("Erreur: Impossible de charger les places.");
+    }
+    delete places;
+}
+
+// "Réserver" button click event
+void __fastcall TForm6::Button1Click(TObject *Sender)
+{
+    if (ComboBox1->ItemIndex == -1) { // No place selected
+        ShowMessage("Veuillez sélectionner une place.");
+        return;
+    }
+
+    TStringList *places = new TStringList;
+    try {
+        places->LoadFromFile("Place.txt");
+        for (int i = 1; i < places->Count; i++) { // Skip header
+            TStringList *row = new TStringList;
+            row->CommaText = places->Strings[i];
+            if (row->Strings[3] == "D") { // Find the selected place
+                row->Strings[3] = "N"; // Mark as non-disponible
+                places->Strings[i] = row->CommaText;
+                break;
+            }
+        }
+        places->SaveToFile("Place.txt");
+        ShowMessage("Place réservée avec succès!");
+        FormShow(Sender); // Refresh the ComboBox
+    } catch (...) {
+        ShowMessage("Erreur: Impossible de réserver la place.");
+    }
+    delete places;
+}

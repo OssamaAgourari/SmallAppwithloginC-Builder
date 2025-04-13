@@ -1,0 +1,32 @@
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit3.h"
+#include "Unit2.h" // Gestion de Parking form
+
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm3 *Form3;
+
+// Constructor
+__fastcall TForm3::TForm3(TComponent* Owner)
+    : TForm(Owner)
+{
+}
+
+void __fastcall TForm3::Button1Click(TObject *Sender)
+{
+	TStringList *parkings = new TStringList;
+	try {
+		parkings->LoadFromFile("Parking.txt");
+		parkings->Add(Edit1->Text + "," + Edit2->Text); // Add new parking
+		parkings->SaveToFile("Parking.txt");
+		ShowMessage("Parking ajouté avec succès!");
+	} catch (...) {
+		ShowMessage("Erreur: Impossible de sauvegarder le parking.");
+	}
+	delete parkings;
+}
+//---------------------------------------------------------------------------
+
+
